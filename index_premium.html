@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>شالوم | منصة المكافآت</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f5f7fb;color:#172033}
+.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf0;display:flex;align-items:center;gap:20px;padding:0 max(14px,calc((100% - 1100px)/2));position:sticky;top:0;z-index:20}
+.brand{font-size:21px;font-weight:900;margin-left:auto;color:#119b87}.nav{border:0;background:transparent;padding:10px 13px;border-radius:10px;cursor:pointer;color:#647083}.nav.active,.nav:hover{background:#eaf8f5;color:#087c6c;font-weight:800}.round{border:1px solid #dfe5ec;background:#fff;border-radius:10px;width:40px;height:40px;cursor:pointer}
+.wrap{max-width:1100px;margin:auto;padding:25px 15px 60px}.page{display:none}.active{display:block}.card{background:#fff;border:1px solid #e5eaf0;border-radius:20px;box-shadow:0 8px 30px rgba(20,40,70,.06)}
+.hero{padding:40px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#fff,#eaf9f6)}h1{margin:8px 0 14px;font-size:35px}.hero p,.muted{color:#697587;line-height:1.85}.hero-art{font-size:100px}.primary,.task-btn,.login-submit{border:0;background:#119b87;color:#fff;padding:13px 20px;border-radius:11px;font-weight:900;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:18px 0}.stat{padding:20px}.stat small,.stat span{display:block;color:#697587}.stat b{font-size:29px;display:inline-block;margin:8px 4px}
+.heading{display:flex;justify-content:space-between;align-items:end;margin:25px 0 15px}.tag{color:#119b87;font-size:13px;font-weight:900}.tasks{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.task{padding:21px}.task-top{display:flex;justify-content:space-between;gap:10px}.task h2{margin:0;font-size:19px}.reward{color:#119b87;font-weight:900}.task p{color:#697587;line-height:1.8}.meta{display:inline-block;background:#f2f5f8;padding:7px 10px;border-radius:8px;font-size:12px;color:#5d6879;margin:2px}.task-btn{width:100%;background:#172033;margin-top:12px}.task-view{padding:25px}.link{border:0;background:transparent;color:#119b87;font-weight:900;cursor:pointer}.bar{height:11px;background:#edf1f5;border-radius:99px;overflow:hidden;margin:25px 0}.bar div{height:100%;background:#119b87;width:0}.timer{text-align:center;font-size:46px;font-weight:900}.verify{display:none;border:1px dashed #cbd5df;border-radius:15px;padding:20px;text-align:center}.verify input{width:130px;padding:11px;text-align:center;border:1px solid #cbd5df;border-radius:10px;font-size:18px}.verify button{border:0;background:#119b87;color:#fff;padding:11px 18px;border-radius:10px;font-weight:900;cursor:pointer}.wallet{padding:28px;margin-bottom:15px}.wallet strong{font-size:45px}.tx{display:flex;justify-content:space-between;padding:16px 19px;border-bottom:1px solid #edf0f4}.tx:last-child{border:0}.plus{color:#119b87;font-weight:900}.ref{padding:25px}.refbox{display:flex;background:#f2f5f8;padding:7px;border-radius:11px;gap:8px}.refbox span{flex:1;padding:10px;direction:ltr;overflow:hidden}.refbox button{border:0;background:#172033;color:#fff;border-radius:9px;padding:0 15px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,30px);opacity:0;background:#172033;color:#fff;padding:12px 18px;border-radius:11px;transition:.25s;z-index:200}.toast.show{opacity:1;transform:translate(-50%,0)}
+.login-screen{position:fixed;inset:0;background:rgba(8,15,25,.84);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:15px;z-index:100}
+.login-box{width:min(430px,100%);background:#fff;border-radius:22px;padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.3)}.login-box h1{font-size:29px}.login-box label{display:block;font-weight:800;margin:14px 0 7px}.login-box input{width:100%;padding:13px;border:1px solid #d5dde6;border-radius:10px;font-size:16px;outline:none}.login-box input:focus{border-color:#119b87}.login-submit{width:100%;margin-top:16px}.error{display:none;color:#b42318;background:#fff0ee;padding:10px;border-radius:9px;margin-top:12px;font-size:13px}
+.dark{background:#10151d;color:#edf2f7}.dark .top,.dark .card,.dark .round,.dark .login-box{background:#171e28;border-color:#293543}.dark .hero{background:linear-gradient(135deg,#171e28,#102a26)}.dark .muted,.dark .hero p,.dark .stat small,.dark .stat span,.dark .task p{color:#aab5c4}.dark .meta,.dark .refbox{background:#10151d}.dark .nav{color:#aab5c4}.dark .login-box input{background:#10151d;color:#fff;border-color:#33404f}
+@media(max-width:720px){.top nav{display:flex;overflow:auto}.nav{font-size:12px;padding:8px}.hero{padding:27px}.hero-art{font-size:70px;opacity:.25}.hero h1{font-size:28px}.stats,.tasks{grid-template-columns:1fr}}
+
+/* ===== SHALOM PREMIUM UI ===== */
+:root{--p:#0d9f87;--p2:#087665;--ink:#10221f;--shadow2:0 20px 60px rgba(8,48,41,.10)}
+body{background:radial-gradient(700px 350px at 100% -5%,rgba(13,159,135,.13),transparent 65%),radial-gradient(600px 300px at 0 35%,rgba(242,187,79,.08),transparent 65%),#f5f8f8}
+.top{height:76px;background:rgba(255,255,255,.84);backdrop-filter:blur(18px);box-shadow:0 1px 0 rgba(16,34,31,.05);border-bottom-color:rgba(220,232,229,.8)}
+.brand{display:flex;align-items:center;gap:9px;font-size:20px}
+.brand:before{content:"◆";display:grid;place-items:center;width:38px;height:38px;border-radius:13px;color:#fff;background:linear-gradient(145deg,var(--p),var(--p2));box-shadow:0 9px 24px rgba(13,159,135,.25);font-size:15px}
+.hero{min-height:340px;padding:44px;border:0;background:linear-gradient(135deg,#fff 10%,#effaf7 100%);box-shadow:var(--shadow2);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:310px;height:310px;border-radius:50%;background:rgba(13,159,135,.08);left:-100px;bottom:-160px}
+.hero>div:first-child{position:relative;z-index:2}
+.hero-art{width:185px;height:185px;border-radius:46px;display:grid;place-items:center;background:linear-gradient(145deg,#12aa91,#075f53);box-shadow:0 28px 65px rgba(7,95,83,.25);transform:rotate(4deg);font-size:92px}
+.primary,.task-btn,.login-submit{background:linear-gradient(135deg,var(--p),var(--p2));box-shadow:0 10px 25px rgba(13,159,135,.20);transition:.2s}
+.primary:hover,.task-btn:hover,.login-submit:hover{transform:translateY(-2px);box-shadow:0 15px 30px rgba(13,159,135,.25)}
+.card{border-color:#e2ece9;box-shadow:0 12px 40px rgba(8,48,41,.065)}
+.stats{gap:16px}.stat{position:relative;overflow:hidden}.stat:after{content:"";position:absolute;inset:auto -25px -45px auto;width:105px;height:105px;border-radius:50%;background:rgba(13,159,135,.055)}
+.task{transition:.22s}.task:hover{transform:translateY(-4px);box-shadow:0 22px 55px rgba(8,48,41,.11)}
+.task-btn{background:#10221f}.task-btn:hover{background:linear-gradient(135deg,var(--p),var(--p2))}
+.wallet{background:linear-gradient(135deg,#092e28,#0b6b5c);color:#fff;border:0;box-shadow:0 25px 60px rgba(7,95,83,.22)}
+.login-screen{background:linear-gradient(145deg,rgba(4,22,19,.94),rgba(7,37,31,.86));backdrop-filter:blur(15px)}
+.login-box{border-radius:27px;box-shadow:0 35px 100px rgba(0,0,0,.36);border:1px solid rgba(255,255,255,.35)}
+.login-box input{border-radius:12px}.login-submit{border-radius:13px}.toast{box-shadow:0 16px 45px rgba(0,0,0,.22)}
+@media(max-width:720px){.top{height:auto;min-height:68px;padding:10px 12px}.brand{font-size:17px}.brand:before{width:34px;height:34px}.hero{padding:27px;min-height:315px}.hero-art{position:absolute;left:12px;bottom:8px;width:125px;height:125px;font-size:62px;opacity:.18}.hero h1{font-size:29px}.stats,.tasks{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+ <div class="login-box">
+  <span class="tag">تسجيل الدخول</span>
+  <h1>أهلًا بك 👋</h1>
+  <p class="muted">أدخل <b>أيدي التليكرام</b> و<b>كود تسجيل الموقع</b> الظاهرين في رسالة البداية وقائمة «حسابي» في البوت.</p>
+  <label>أيدي التليكرام</label><input id="telegramId" inputmode="numeric" placeholder="مثال: 123456789">
+  <label>كود تسجيل الموقع</label><input id="registrationCode" maxlength="8" autocomplete="off" placeholder="مثال: AB7K2P9Q">
+  <div id="loginError" class="error"></div>
+  <button id="loginBtn" class="login-submit">تسجيل الدخول</button>
+  <p class="muted" style="font-size:12px">كود التسجيل مرتبط بحسابك. لا تشاركه مع الآخرين.</p>
+ </div>
+</div>
+
+<header class="top">
+ <div class="brand">◆ شالوم</div>
+ <nav>
+  <button class="nav active" data-page="home">الرئيسية</button>
+  <button class="nav" data-page="tasks">المهام</button>
+  <button class="nav" data-page="wallet">المحفظة</button>
+  <button class="nav" data-page="referrals">الإحالات</button>
+ </nav>
+ <button class="round" id="theme">☾</button>
+</header>
+
+<main class="wrap">
+<section id="home" class="page active">
+ <div class="hero card"><div><span class="tag">منصة المكافآت</span><h1>اكسب النقاط وأنجز المهام 🎁</h1><p>نفّذ المهام، أكمل التحقق، واستلم المكافآت بعد تأكيد الاستحقاق.</p><button class="primary" data-go="tasks">ابدأ الآن</button></div><div class="hero-art">🪙</div></div>
+ <div id="welcomeStrip" class="card" style="padding:14px 18px;margin:16px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;background:linear-gradient(135deg,#fff,#f0faf7)">
+    <div><span class="tag">👋 حسابك</span><div id="welcomeName" style="font-size:18px;font-weight:950;margin-top:4px">مرحبًا بك</div></div>
+    <div style="text-align:left"><span class="muted" style="font-size:12px">المستوى</span><b id="homeLevel" style="display:block;font-size:20px">1</b></div>
+  </div>
+  <div class="stats"><div class="stat card"><small>رصيدك</small><b id="balance">0</b><span>نقطة</span></div><div class="stat card"><small>أرباح اليوم</small><b id="daily">0</b><span>نقطة</span></div><div class="stat card"><small>المهام المكتملة</small><b id="done">0</b><span>مهمة</span></div></div>
+</section>
+
+<section id="tasks" class="page">
+ <div class="heading"><div><span class="tag">🎯 المهام</span><h1>المهام المتاحة</h1></div></div>
+ <div id="taskList" class="tasks"></div>
+</section>
+
+<section id="taskView" class="page"><div class="task-view card"><button class="link" id="back">← العودة</button><div id="taskBody"></div></div></section>
+
+<section id="wallet" class="page">
+ <div class="heading"><div><span class="tag">🪙 المحفظة</span><h1>رصيدك</h1></div></div>
+ <div class="wallet card"><small>الرصيد الحالي</small><br><strong id="walletBalance">0</strong> <span>نقطة</span></div>
+ <div class="card" id="transactions"></div>
+</section>
+
+<section id="referrals" class="page">
+ <div class="heading"><div><span class="tag">👥 الإحالات</span><h1>دعوة صديق</h1></div></div>
+ <div class="ref card"><h2>رابط الإحالة</h2><p class="muted">رابط الإحالة المرتبط بحسابك في البوت.</p><div class="refbox"><span id="ref"></span><button id="copy">نسخ</button></div></div>
+</section>
+</main>
+<div id="toast" class="toast"></div>
+
+<script>
+/*
+  مهم:
+  API_BASE يجب أن يشير إلى عنوان سيرفر البوت الذي يشغل /api/login.
+  مثال عند الاستضافة الآمنة: https://example.com
+  أو مؤقتًا: http://SERVER-IP:8080
+*/
+const API_BASE = "https://ofz.pythonanywhere.com"; // FPS.ms API // ضع هنا رابط API الخاص بالبوت
+
+let tasks=[];
+let user=null,current=null,timer=null;
+
+const $=s=>document.querySelector(s);
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2200)}
+function showPage(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$("#"+id).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.page===id));scrollTo({top:0,behavior:"smooth"})}
+function setUser(u){
+ user=u;
+ $("#balance").textContent=(u.balance||0).toLocaleString();
+ $("#walletBalance").textContent=(u.balance||0).toLocaleString();
+ $("#done").textContent=u.tasks_completed||0;
+ $("#daily").textContent="0";
+ $("#ref").textContent="https://t.me/YourBot?start=ref_"+u.user_id;
+}
+async function login(){
+  const id=$("#telegramId").value.trim();
+  const code=$("#registrationCode").value.trim().toUpperCase();
+  const err=$("#loginError");
+  err.style.display="none";
+  if(!id || !code){ err.textContent="أدخل أيدي التليكرام وكود التسجيل."; err.style.display="block"; return; }
+  const btn=$("#loginBtn");
+  btn.disabled=true; btn.textContent="جارٍ تسجيل الدخول...";
+  try{
+    const r=await fetch(API_BASE+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({telegram_id:id,registration_code:code})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok || !d.ok) throw new Error(d.error||"invalid_credentials");
+    setUser(d.user);
+    sessionStorage.setItem("reward_user",JSON.stringify(d.user));
+    $("#loginScreen").style.display="none";
+    await loadTasks();
+    await renderTransactions();
+    showPage("home");
+    toast("✅ تم تسجيل الدخول بنجاح");
+  }catch(e){
+    console.error("Website login error:",e);
+    err.textContent=e.message==="invalid_credentials"?"❌ أيدي التليكرام أو كود التسجيل غير صحيح.":"❌ تعذر الاتصال بسيرفر البوت. تأكد أن السيرفر يعمل وأن API_BASE صحيح.";
+    err.style.display="block";
+  }finally{
+    btn.disabled=false; btn.textContent="تسجيل الدخول";
+  }
+}
+async function loadTasks(){
+ try{
+  const r=await fetch(API_BASE+"/api/tasks?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code));
+  const d=await r.json(); if(!r.ok||!d.ok) throw new Error();
+  tasks=d.tasks||[];
+  renderTasks();
+ }catch(e){
+  $("#taskList").innerHTML='<div class="card task"><p class="muted">❌ تعذر تحميل المهام من البوت حاليًا.</p></div>';
+ }
+}
+function renderTasks(){
+ $("#taskList").innerHTML=tasks.length?tasks.map(t=>`<article class="task card"><div class="task-top"><h2>${t.title}</h2><span class="reward">+${t.reward}</span></div><p>${t.description}</p><span class="meta">🏷️ ${t.provider||"مزود"}</span><span class="meta">${t.status==="completed"?"✅ مكتملة":t.status==="started"?"⏳ بدأت":"🆕 متاحة"}</span><button class="task-btn" ${t.status==="completed"?'disabled':''} onclick="startTask(${t.id})">${t.status==="started"?"متابعة المهمة":"ابدأ المهمة"}</button></article>`).join(""):'<div class="card task"><p class="muted">📋 لا توجد مهام متاحة حاليًا.</p></div>';
+}
+async function renderTransactions(){
+ try{
+  const r=await fetch(API_BASE+"/api/transactions?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code));
+  const d=await r.json(); if(!r.ok||!d.ok) throw new Error();
+  $("#transactions").innerHTML=(d.transactions||[]).length?d.transactions.map(x=>`<div class="tx"><span>🪙 ${x.description||x.type}</span><span class="plus">${x.amount>0?"+":""}${x.amount}</span></div>`).join(""): '<div class="tx">لا توجد عمليات بعد.</div>';
+ }catch(e){ $("#transactions").innerHTML='<div class="tx">تعذر تحميل السجل.</div>'; }
+}
+async function startTask(id){
+ current=tasks.find(t=>t.id===id); if(!current) return;
+ try{
+  const r=await fetch(API_BASE+"/api/tasks/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({telegram_id:user.user_id,registration_code:user.registration_code,task_id:id})});
+  const d=await r.json(); if(!r.ok||!d.ok) throw new Error(d.error||"start_failed");
+  current={...current,...d.task}; showPage("taskView");
+  const open=current.content_kind==="url"&&current.content?`<a class="primary" target="_blank" rel="noopener" href="${current.content}">🌐 فتح رابط المهمة</a>`:`<div class="card" style="padding:15px">${current.content||"نفّذ المطلوب ثم ارجع."}</div>`;
+  $("#taskBody").innerHTML=`<span class="tag">المهمة #${current.id}</span><h1>${current.title}</h1><p class="muted">${current.description||""}</p><p><b>المكافأة:</b> <span class="reward">+${current.reward} نقطة</span></p>${open}<div class="bar"><div id="bar"></div></div><div class="timer" id="timer">${current.duration||0}</div><p id="status" class="muted" style="text-align:center">⏳ المهمة قيد التنفيذ...</p><div class="verify" id="verify"><b>🔐 انتهت مدة الانتظار</b><p class="muted">أكمل التحقق ثم سنفحص حالة المهمة من الخادم.</p><div style="font-size:24px;font-weight:900;margin:15px" id="capq"></div><input id="answer" inputmode="numeric" placeholder="الإجابة"><br><br><button onclick="verify()">تحقق</button></div>`;
+  const duration=current.duration||0; let a=Math.floor(Math.random()*8)+2,b=Math.floor(Math.random()*8)+1; $("#capq").textContent=`${a} + ${b} = ?`; $("#answer").dataset.answer=a+b;
+  let left=duration; clearInterval(timer); if(duration<=0){$("#verify").style.display="block";return;}
+  timer=setInterval(()=>{left--;$("#timer").textContent=left;$("#bar").style.width=((duration-left)/duration*100)+"%";if(left<=0){clearInterval(timer);$("#timer").textContent="✓";$("#status").textContent="أكمل التحقق الآن.";$("#verify").style.display="block"}},1000);
+ }catch(e){toast("❌ تعذر بدء المهمة");}
+}
+async function verify(){
+ if($("#answer").value.trim()!==$("#answer").dataset.answer)return toast("❌ إجابة التحقق غير صحيحة");
+ try{
+  const r=await fetch(API_BASE+"/api/tasks/status?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code)+"&task_id="+current.id);
+  const d=await r.json();
+  if(d.status==="completed"){ toast("🎉 تمت الموافقة على المهمة"); const u=await fetch(API_BASE+"/api/user?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code)); const ud=await u.json(); if(ud.ok){setUser(ud.user);sessionStorage.setItem("reward_user",JSON.stringify(ud.user));} await renderTransactions(); await loadTasks(); showPage("tasks"); }
+  else toast("⏳ لم يصل تأكيد إكمال المهمة بعد. جرّب لاحقًا.");
+ }catch(e){toast("❌ تعذر التحقق من حالة المهمة");}
+}
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>showPage(b.dataset.go));
+$("#back").onclick=()=>{clearInterval(timer);showPage("tasks")};
+$("#loginBtn").onclick=login;
+$("#registrationCode").oninput=e=>e.target.value=e.target.value.toUpperCase();
+$("#copy").onclick=async()=>{try{await navigator.clipboard.writeText($("#ref").textContent);toast("✅ تم نسخ الرابط")}catch{}};
+$("#theme").onclick=()=>document.body.classList.toggle("dark");
+renderTasks();renderTransactions();
+try{const c=JSON.parse(sessionStorage.getItem("reward_user")||"null");if(c){setUser(c);$("#loginScreen").style.display="none";loadTasks();renderTransactions()}}catch{}
+</script>
+</body>
+</html>
