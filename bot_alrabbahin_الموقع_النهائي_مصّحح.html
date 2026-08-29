@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>بوت الربّاحين | منصة المكافآت</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f5f7fb;color:#172033}
+.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf0;display:flex;align-items:center;gap:20px;padding:0 max(14px,calc((100% - 1100px)/2));position:sticky;top:0;z-index:20}
+.brand{font-size:21px;font-weight:900;margin-left:auto;color:#119b87}.nav{border:0;background:transparent;padding:10px 13px;border-radius:10px;cursor:pointer;color:#647083}.nav.active,.nav:hover{background:#eaf8f5;color:#087c6c;font-weight:800}.round{border:1px solid #dfe5ec;background:#fff;border-radius:10px;width:40px;height:40px;cursor:pointer}
+.wrap{max-width:1100px;margin:auto;padding:25px 15px 60px}.page{display:none}.active{display:block}.card{background:#fff;border:1px solid #e5eaf0;border-radius:20px;box-shadow:0 8px 30px rgba(20,40,70,.06)}
+.hero{padding:40px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#fff,#eaf9f6)}h1{margin:8px 0 14px;font-size:35px}.hero p,.muted{color:#697587;line-height:1.85}.hero-art{font-size:100px}.primary,.task-btn,.login-submit{border:0;background:#119b87;color:#fff;padding:13px 20px;border-radius:11px;font-weight:900;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:18px 0}.stat{padding:20px}.stat small,.stat span{display:block;color:#697587}.stat b{font-size:29px;display:inline-block;margin:8px 4px}
+.heading{display:flex;justify-content:space-between;align-items:end;margin:25px 0 15px}.tag{color:#119b87;font-size:13px;font-weight:900}.tasks{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.task{padding:21px}.task-top{display:flex;justify-content:space-between;gap:10px}.task h2{margin:0;font-size:19px}.reward{color:#119b87;font-weight:900}.task p{color:#697587;line-height:1.8}.meta{display:inline-block;background:#f2f5f8;padding:7px 10px;border-radius:8px;font-size:12px;color:#5d6879;margin:2px}.task-btn{width:100%;background:#172033;margin-top:12px}.task-view{padding:25px}.link{border:0;background:transparent;color:#119b87;font-weight:900;cursor:pointer}.bar{height:11px;background:#edf1f5;border-radius:99px;overflow:hidden;margin:25px 0}.bar div{height:100%;background:#119b87;width:0}.timer{text-align:center;font-size:46px;font-weight:900}.verify{display:none;border:1px dashed #cbd5df;border-radius:15px;padding:20px;text-align:center}.verify input{width:130px;padding:11px;text-align:center;border:1px solid #cbd5df;border-radius:10px;font-size:18px}.verify button{border:0;background:#119b87;color:#fff;padding:11px 18px;border-radius:10px;font-weight:900;cursor:pointer}.wallet{padding:28px;margin-bottom:15px}.wallet strong{font-size:45px}.tx{display:flex;justify-content:space-between;padding:16px 19px;border-bottom:1px solid #edf0f4}.tx:last-child{border:0}.plus{color:#119b87;font-weight:900}.ref{padding:25px}.refbox{display:flex;background:#f2f5f8;padding:7px;border-radius:11px;gap:8px}.refbox span{flex:1;padding:10px;direction:ltr;overflow:hidden}.refbox button{border:0;background:#172033;color:#fff;border-radius:9px;padding:0 15px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,30px);opacity:0;background:#172033;color:#fff;padding:12px 18px;border-radius:11px;transition:.25s;z-index:200}.toast.show{opacity:1;transform:translate(-50%,0)}
+.login-screen{position:fixed;inset:0;background:rgba(8,15,25,.84);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:15px;z-index:100}
+.login-box{width:min(430px,100%);background:#fff;border-radius:22px;padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.3)}.login-box h1{font-size:29px}.login-box label{display:block;font-weight:800;margin:14px 0 7px}.login-box input{width:100%;padding:13px;border:1px solid #d5dde6;border-radius:10px;font-size:16px;outline:none}.login-box input:focus{border-color:#119b87}.login-submit{width:100%;margin-top:16px}.error{display:none;color:#b42318;background:#fff0ee;padding:10px;border-radius:9px;margin-top:12px;font-size:13px}
+.dark{background:#10151d;color:#edf2f7}.dark .top,.dark .card,.dark .round,.dark .login-box{background:#171e28;border-color:#293543}.dark .hero{background:linear-gradient(135deg,#171e28,#102a26)}.dark .muted,.dark .hero p,.dark .stat small,.dark .stat span,.dark .task p{color:#aab5c4}.dark .meta,.dark .refbox{background:#10151d}.dark .nav{color:#aab5c4}.dark .login-box input{background:#10151d;color:#fff;border-color:#33404f}
+@media(max-width:720px){.top nav{display:flex;overflow:auto}.nav{font-size:12px;padding:8px}.hero{padding:27px}.hero-art{font-size:70px;opacity:.25}.hero h1{font-size:28px}.stats,.tasks{grid-template-columns:1fr}}
+
+/* ===== SHALOM PREMIUM UI ===== */
+:root{--p:#0d9f87;--p2:#087665;--ink:#10221f;--shadow2:0 20px 60px rgba(8,48,41,.10)}
+body{background:radial-gradient(700px 350px at 100% -5%,rgba(13,159,135,.13),transparent 65%),radial-gradient(600px 300px at 0 35%,rgba(242,187,79,.08),transparent 65%),#f5f8f8}
+.top{height:76px;background:rgba(255,255,255,.84);backdrop-filter:blur(18px);box-shadow:0 1px 0 rgba(16,34,31,.05);border-bottom-color:rgba(220,232,229,.8)}
+.brand{display:flex;align-items:center;gap:9px;font-size:20px}
+.brand:before{content:"◆";display:grid;place-items:center;width:38px;height:38px;border-radius:13px;color:#fff;background:linear-gradient(145deg,var(--p),var(--p2));box-shadow:0 9px 24px rgba(13,159,135,.25);font-size:15px}
+.hero{min-height:340px;padding:44px;border:0;background:linear-gradient(135deg,#fff 10%,#effaf7 100%);box-shadow:var(--shadow2);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:310px;height:310px;border-radius:50%;background:rgba(13,159,135,.08);left:-100px;bottom:-160px}
+.hero>div:first-child{position:relative;z-index:2}
+.hero-art{width:185px;height:185px;border-radius:46px;display:grid;place-items:center;background:linear-gradient(145deg,#12aa91,#075f53);box-shadow:0 28px 65px rgba(7,95,83,.25);transform:rotate(4deg);font-size:92px}
+.primary,.task-btn,.login-submit{background:linear-gradient(135deg,var(--p),var(--p2));box-shadow:0 10px 25px rgba(13,159,135,.20);transition:.2s}
+.primary:hover,.task-btn:hover,.login-submit:hover{transform:translateY(-2px);box-shadow:0 15px 30px rgba(13,159,135,.25)}
+.card{border-color:#e2ece9;box-shadow:0 12px 40px rgba(8,48,41,.065)}
+.stats{gap:16px}.stat{position:relative;overflow:hidden}.stat:after{content:"";position:absolute;inset:auto -25px -45px auto;width:105px;height:105px;border-radius:50%;background:rgba(13,159,135,.055)}
+.task{transition:.22s}.task:hover{transform:translateY(-4px);box-shadow:0 22px 55px rgba(8,48,41,.11)}
+.task-btn{background:#10221f}.task-btn:hover{background:linear-gradient(135deg,var(--p),var(--p2))}
+.wallet{background:linear-gradient(135deg,#092e28,#0b6b5c);color:#fff;border:0;box-shadow:0 25px 60px rgba(7,95,83,.22)}
+.login-screen{background:linear-gradient(145deg,rgba(4,22,19,.94),rgba(7,37,31,.86));backdrop-filter:blur(15px)}
+.login-box{border-radius:27px;box-shadow:0 35px 100px rgba(0,0,0,.36);border:1px solid rgba(255,255,255,.35)}
+.login-box input{border-radius:12px}.login-submit{border-radius:13px}.toast{box-shadow:0 16px 45px rgba(0,0,0,.22)}
+@media(max-width:720px){.top{height:auto;min-height:68px;padding:10px 12px}.brand{font-size:17px}.brand:before{width:34px;height:34px}.hero{padding:27px;min-height:315px}.hero-art{position:absolute;left:12px;bottom:8px;width:125px;height:125px;font-size:62px;opacity:.18}.hero h1{font-size:29px}.stats,.tasks{grid-template-columns:1fr}}
+
+
+/* =========================================================
+   SHALOM — PREMIUM ARABIC DESIGN SYSTEM v2
+   Visual layer only. API/JS behavior is intentionally untouched.
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#f6f8f7;
+  --surface:#ffffff;
+  --surface-soft:#f3f8f6;
+  --surface-green:#eaf6f2;
+  --text:#162522;
+  --text-soft:#536562;
+  --text-faint:#84938f;
+  --line:#e2ebe8;
+  --primary:#0b8f78;
+  --primary-dark:#066957;
+  --primary-deep:#063e35;
+  --gold:#d7a43b;
+  --danger:#c63b32;
+  --shadow-xs:0 4px 14px rgba(11,55,47,.05);
+  --shadow-sm:0 10px 30px rgba(11,55,47,.07);
+  --shadow-md:0 20px 55px rgba(11,55,47,.10);
+  --shadow-lg:0 30px 90px rgba(5,40,34,.16);
+  --r-sm:12px;
+  --r-md:18px;
+  --r-lg:26px;
+  --r-xl:32px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(900px 450px at 105% -8%,rgba(11,143,120,.10),transparent 66%),
+    radial-gradient(750px 420px at -8% 30%,rgba(215,164,59,.055),transparent 68%),
+    var(--bg);
+  font-family:"Cairo",Tahoma,Arial,sans-serif;
+  font-size:15px;
+  line-height:1.75;
+  letter-spacing:-.08px;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.22;
+  background-image:radial-gradient(rgba(6,62,53,.08) .7px,transparent .7px);
+  background-size:22px 22px;
+  mask-image:linear-gradient(to bottom,black,transparent 80%);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed}
+
+/* ---------- Header ---------- */
+.top{
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:74px;
+  padding:0 max(16px,calc((100% - 1160px)/2));
+  display:flex;
+  align-items:center;
+  gap:18px;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(22px) saturate(150%);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);
+  border-bottom:1px solid rgba(226,235,232,.92);
+  box-shadow:0 4px 22px rgba(8,48,41,.035);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-left:auto;
+  color:var(--primary-deep);
+  font-family:"Vazirmatn",sans-serif;
+  font-weight:800;
+  font-size:19px;
+  white-space:nowrap;
+}
+.brand-mark{
+  width:39px;height:39px;
+  display:grid;place-items:center;
+  border-radius:13px;
+  color:#fff;
+  background:linear-gradient(145deg,var(--primary),var(--primary-dark));
+  box-shadow:0 9px 22px rgba(11,143,120,.22);
+  font-size:14px;
+}
+nav{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  min-width:0;
+  overflow:auto;
+  scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+.nav{
+  border:0;
+  background:transparent;
+  color:#687a76;
+  padding:9px 13px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+  transition:.18s ease;
+}
+.nav:hover{color:var(--primary-dark);background:#eef7f4}
+.nav.active{
+  color:var(--primary-dark);
+  background:#e7f5f1;
+  box-shadow:inset 0 0 0 1px rgba(11,143,120,.05);
+}
+.round{
+  width:40px;height:40px;
+  flex:none;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--text);
+  box-shadow:var(--shadow-xs);
+}
+
+/* ---------- Layout ---------- */
+.wrap{
+  width:min(1160px,100%);
+  margin:auto;
+  padding:30px 16px 80px;
+}
+.page{display:none;animation:pageIn .25s ease}
+.page.active{display:block}
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-sm);
+}
+
+/* ---------- Typography ---------- */
+h1,h2,h3{
+  margin-top:0;
+  color:var(--text);
+  font-family:"Noto Naskh Arabic","Cairo",Tahoma,serif;
+  font-weight:700;
+  line-height:1.45;
+  letter-spacing:0;
+}
+h1{font-size:38px}
+h2{font-size:22px}
+p{margin-top:0}
+.muted{color:var(--text-soft);line-height:1.9}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  color:var(--primary-dark);
+  font-size:12px;
+  font-weight:800;
+  line-height:1;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 11px;
+  border-radius:999px;
+  color:var(--primary-dark);
+  background:var(--surface-green);
+  font-size:11px;
+  font-weight:800;
+  line-height:1.2;
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height:350px;
+  padding:46px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  border:0;
+  border-radius:var(--r-xl);
+  background:
+    linear-gradient(120deg,#fff 10%,#f2faf7 100%);
+  box-shadow:var(--shadow-md);
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  width:480px;height:480px;
+  left:-235px;bottom:-300px;
+  border-radius:50%;
+  border:1px solid rgba(11,143,120,.10);
+  box-shadow:0 0 0 40px rgba(11,143,120,.025),0 0 0 80px rgba(11,143,120,.015);
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  width:230px;height:230px;
+  right:33%;top:-150px;
+  border-radius:50%;
+  background:rgba(11,143,120,.055);
+}
+.hero-copy{position:relative;z-index:2;max-width:690px}
+.hero h1{
+  margin:14px 0 11px;
+  max-width:680px;
+  font-size:40px;
+}
+.hero p{max-width:650px;color:var(--text-soft);font-size:15px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
+.hero-art{
+  position:relative;
+  z-index:2;
+  width:178px;height:178px;
+  flex:none;
+  display:grid;place-items:center;
+  border-radius:48px;
+  color:#fff;
+  background:linear-gradient(145deg,var(--primary),var(--orange));
+  box-shadow:0 28px 65px rgba(217,47,47,.18);
+  transform:rotate(4deg);
+  font-size:82px;
+}
+
+/* ---------- Buttons ---------- */
+.primary,.task-btn,.login-submit{
+  border:0;
+  color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--orange));
+  border-radius:12px;
+  padding:12px 18px;
+  font-size:13px;
+  font-weight:800;
+  box-shadow:0 9px 23px rgba(217,47,47,.18);
+  transition:transform .18s,box-shadow .18s,filter .18s;
+}
+.primary:hover,.task-btn:hover,.login-submit:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(217,47,47,.23);
+  filter:saturate(1.04);
+}
+.secondary{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:12px;
+  padding:12px 18px;
+  font-size:13px;
+  font-weight:800;
+}
+.link{
+  border:0;
+  background:transparent;
+  color:var(--primary-dark);
+  padding:5px 0;
+  font-weight:800;
+}
+
+/* ---------- Stats ---------- */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin:18px 0;
+}
+.stat{
+  position:relative;
+  overflow:hidden;
+  min-height:125px;
+  padding:20px;
+}
+.stat:before{
+  content:"";
+  position:absolute;
+  right:0;top:0;
+  width:4px;height:100%;
+  background:linear-gradient(var(--primary),var(--orange));
+}
+.stat:after{
+  content:"";
+  position:absolute;
+  width:120px;height:120px;
+  left:-40px;bottom:-70px;
+  border-radius:50%;
+  background:rgba(255,154,61,.09);
+}
+.stat-icon{
+  float:left;
+  padding:8px 10px;
+  border-radius:11px;
+  background:#fff1e8;
+  font-size:21px;
+}
+.stat small,.stat span{display:block;color:var(--text-faint)}
+.stat b{
+  display:inline-block;
+  margin:7px 4px 2px;
+  font-size:28px;
+  font-weight:800;
+}
+
+/* ---------- Section headings ---------- */
+.heading{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin:6px 0 18px;
+}
+.heading h1{margin:5px 0 0;font-size:31px}
+
+/* ---------- Tasks ---------- */
+.tasks{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+.task{
+  position:relative;
+  padding:22px;
+  transition:.2s ease;
+}
+.task:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-md);
+}
+.task-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+}
+.task h2{margin:0;font-family:"Vazirmatn",sans-serif;font-size:18px;font-weight:800}
+.reward{
+  color:var(--primary-dark);
+  font-weight:800;
+  white-space:nowrap;
+}
+.task p{
+  min-height:48px;
+  color:var(--text-soft);
+  font-size:13px;
+  line-height:1.85;
+}
+.meta{
+  display:inline-flex;
+  margin:2px;
+  padding:6px 9px;
+  border-radius:8px;
+  color:#687a76;
+  background:#fff1e8;
+  font-size:11px;
+}
+.task-btn{width:100%;margin-top:13px}
+
+/* ---------- Task view ---------- */
+.task-view{padding:28px}
+.task-cover{
+  margin-top:17px;
+  padding:23px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:linear-gradient(135deg,#fff4ed,#fff);
+}
+.task-cover h1{margin:5px 0 9px;font-size:31px}
+.task-action{margin:18px 0}
+.task-action a{display:inline-flex;text-decoration:none}
+.bar{
+  height:9px;
+  margin:23px 0 12px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#e9efed;
+}
+.bar div{
+  width:0;height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,var(--primary),var(--orange));
+  transition:width .2s;
+}
+.timer{
+  text-align:center;
+  font-family:"Vazirmatn",sans-serif;
+  font-size:46px;
+  font-weight:800;
+}
+.verify{
+  display:none;
+  padding:20px;
+  text-align:center;
+  border:1px dashed #bed3cc;
+  border-radius:17px;
+  background:#fbfefd;
+}
+.verify input{
+  width:150px;
+  padding:10px;
+  text-align:center;
+  border:1px solid #cbd9d5;
+  border-radius:10px;
+  outline:0;
+}
+.verify input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(11,143,120,.08)}
+.verify button{
+  border:0;
+  border-radius:10px;
+  padding:10px 19px;
+  color:#fff;
+  background:var(--primary-dark);
+  font-weight:800;
+}
+
+/* ---------- Wallet ---------- */
+.wallet{
+  margin-bottom:16px;
+  padding:29px;
+  border:0;
+  color:#fff;
+  background:linear-gradient(135deg,#092c27,#0b6859);
+  box-shadow:0 25px 60px rgba(7,95,83,.19);
+}
+.wallet small{opacity:.68}
+.wallet strong{display:inline-block;margin-top:8px;font-size:46px;font-weight:800}
+.wallet .coin{
+  display:inline-block;
+  margin-right:5px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.11);
+}
+.wallet-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:16px}
+.mini-card{padding:20px}
+.mini-card b{display:block;margin-top:6px;font-size:24px}
+.tx{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 20px;
+  border-bottom:1px solid #edf1f0;
+}
+.tx:last-child{border-bottom:0}
+.plus{color:var(--primary-dark);font-weight:800}
+.tx-date{display:block;margin-top:3px;color:var(--text-faint);font-size:10px}
+
+/* ---------- Referrals ---------- */
+.ref{padding:28px}
+.ref h2{margin:10px 0 5px}
+.refbox{
+  display:flex;
+  gap:7px;
+  padding:6px;
+  border-radius:12px;
+  background:#fff1e8;
+}
+.refbox span{
+  flex:1;
+  min-width:0;
+  padding:9px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  direction:ltr;
+}
+.refbox button{
+  border:0;
+  border-radius:9px;
+  padding:0 15px;
+  color:#fff;
+  background:var(--primary-deep);
+  font-weight:800;
+}
+
+/* ---------- Login ---------- */
+.login-screen{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:linear-gradient(145deg,rgba(4,22,19,.95),rgba(7,37,31,.89));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.login-box{
+  width:min(450px,100%);
+  padding:31px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:28px;
+  background:#fff;
+  box-shadow:0 35px 100px rgba(0,0,0,.36);
+}
+.login-logo{
+  width:58px;height:58px;
+  display:grid;place-items:center;
+  margin-bottom:17px;
+  border-radius:18px;
+  color:#fff;
+  background:linear-gradient(145deg,var(--primary),var(--primary-dark));
+  box-shadow:0 12px 28px rgba(217,47,47,.23);
+}
+.login-box h1{margin:9px 0 7px;font-size:31px}
+.login-box label{display:block;margin:15px 0 7px;font-weight:800;font-size:13px}
+.login-box input{
+  width:100%;
+  padding:13px;
+  border:1px solid #d5e0dd;
+  border-radius:11px;
+  outline:0;
+  background:#fff;
+  font-family:"Vazirmatn",sans-serif;
+  font-size:14px;
+}
+.login-box input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(11,143,120,.08)}
+.login-submit{width:100%;margin-top:17px}
+.login-tip{font-size:11px;text-align:center;margin:14px 0 0}
+.error{
+  display:none;
+  margin-top:11px;
+  padding:10px 12px;
+  border-radius:10px;
+  color:var(--danger);
+  background:#fff1ef;
+  font-size:12px;
+  line-height:1.65;
+}
+
+/* ---------- Utility states ---------- */
+.empty{grid-column:1/-1;padding:30px;text-align:center}
+.skeleton{
+  height:180px;
+  position:relative;
+  overflow:hidden;
+  background:#eef3f1;
+}
+.skeleton:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
+  animation:shimmer 1.15s infinite;
+}
+@keyframes shimmer{100%{transform:translateX(100%)}}
+.toast{
+  position:fixed;
+  z-index:200;
+  left:50%;
+  bottom:24px;
+  transform:translate(-50%,30px);
+  opacity:0;
+  max-width:90%;
+  padding:12px 18px;
+  border-radius:12px;
+  color:#fff;
+  background:#102522;
+  box-shadow:0 16px 45px rgba(0,0,0,.22);
+  transition:.25s;
+  white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Dark mode ---------- */
+.dark{
+  --bg:#08110f;--surface:#111b19;--surface-soft:#0d1715;
+  --text:#edf6f3;--text-soft:#a8b9b5;--text-faint:#80918d;--line:#253934;
+}
+.dark .top{background:rgba(17,27,25,.90);border-color:#243632}
+.dark .nav{color:#a8b9b5}.dark .nav:hover,.dark .nav.active{background:#14362f;color:#70d8bf}
+.dark .card{box-shadow:0 15px 45px rgba(0,0,0,.18)}
+.dark .hero{background:linear-gradient(135deg,#111b19,#0d2923)}
+.dark .secondary,.dark .round{background:var(--surface);color:var(--text);border-color:var(--line)}
+.dark .meta{background:#17231f;color:#a8b9b5}
+.dark .task-cover,.dark .verify{background:#0d1b17;border-color:#315149}
+.dark .refbox{background:#0d1614}
+.dark .login-box{background:#111b19;border-color:#2a403a}
+.dark .login-box input{background:#0d1614;color:#fff;border-color:#31443f}
+.dark .stat:after{background:rgba(90,220,190,.035)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:820px){
+  .hero{padding:32px}
+  .hero-art{width:145px;height:145px;font-size:68px}
+}
+@media(max-width:640px){
+  body{font-size:14px}
+  .top{height:auto;min-height:68px;padding:9px 11px;gap:7px}
+  .brand{font-size:16px}.brand-mark{width:34px;height:34px}
+  nav{order:3;width:100%}.top{flex-wrap:wrap}
+  .round{width:37px;height:37px}
+  .nav{font-size:11px;padding:8px 9px}
+  .wrap{padding:18px 12px 58px}
+  .hero{display:block;min-height:315px;padding:26px}
+  .hero h1{font-size:29px}
+  .hero-art{position:absolute;left:12px;bottom:8px;width:125px;height:125px;font-size:58px;opacity:.14}
+  .stats,.tasks,.wallet-grid{grid-template-columns:1fr}
+  .heading h1{font-size:28px}
+  .task-view,.ref,.wallet{padding:21px}
+  .login-box{padding:24px;border-radius:23px}
+  .toast{white-space:normal;text-align:center}
+}
+
+
+/* ===== بوت الربّاحين — Arabic Premium UI ===== */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#f6f8f7;--surface:#fff;--soft:#eef8f5;--text:#14231f;
+  --muted:#657672;--line:#e0ebe7;--primary:#0b9078;--primary2:#066b5a;
+  --shadow:0 14px 42px rgba(8,54,46,.08);--shadow2:0 24px 70px rgba(8,54,46,.12);
+  --radius:22px;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--text);font-family:"Cairo",Tahoma,Arial,sans-serif;
+  background:
+    radial-gradient(800px 380px at 105% -5%,rgba(11,144,120,.10),transparent 68%),
+    radial-gradient(700px 350px at -5% 35%,rgba(211,166,69,.055),transparent 70%),var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"Noto Naskh Arabic","Cairo",serif;letter-spacing:0;line-height:1.45}
+.top{
+  position:sticky;top:0;z-index:50;height:72px;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(224,235,231,.9);box-shadow:0 3px 18px rgba(8,54,46,.04)
+}
+.brand{font-family:"Vazirmatn",sans-serif;font-weight:800;color:#073e34}
+.nav{font-family:"Vazirmatn",sans-serif;font-weight:700}
+.card{border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);background:var(--surface)}
+.hero{
+  position:relative;overflow:hidden;border:0;border-radius:30px;
+  background:linear-gradient(135deg,#fff 5%,#eef9f5 100%);box-shadow:var(--shadow2)
+}
+.hero h1{font-size:40px;margin:10px 0}
+.hero p{color:var(--muted)}
+.primary,.task-btn,.login-submit{
+  border:0;border-radius:12px!important;
+  background:linear-gradient(135deg,var(--primary),var(--primary2))!important;
+  box-shadow:0 10px 25px rgba(11,144,120,.20)!important;
+  font-family:"Vazirmatn",sans-serif;font-weight:800;
+  transition:.2s ease
+}
+.primary:hover,.task-btn:hover,.login-submit:hover{transform:translateY(-2px)}
+.stats{gap:15px}
+.stat{position:relative;overflow:hidden}
+.stat:after{
+  content:"";position:absolute;width:110px;height:110px;left:-38px;bottom:-65px;
+  border-radius:50%;background:rgba(11,144,120,.05)
+}
+.task{transition:.2s ease}
+.task:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+.wallet{border-radius:24px!important;background:linear-gradient(135deg,#7a1d1d,#d92f2f)!important}
+.login-box{border-radius:27px!important;box-shadow:0 35px 100px rgba(0,0,0,.35)!important}
+input,button{font-family:"Vazirmatn",sans-serif}
+@media(max-width:700px){
+  .hero{padding:26px!important}.hero h1{font-size:29px}
+  .stats,.tasks{grid-template-columns:1fr!important}
+}
+
+/* ===== Telegram name + level bar ===== */
+.welcome-user{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:16px 19px;margin:16px 0;
+  border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#fff,#f1faf7);
+  box-shadow:var(--shadow)
+}
+.welcome-user-name{
+  font-size:18px;font-weight:800;color:var(--text)
+}
+.level-box{min-width:230px}
+.level-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px
+}
+.level-row b{color:var(--primary2)}
+.level-track{
+  width:100%;height:9px;overflow:hidden;border-radius:99px;background:#dfeae6
+}
+.level-fill{
+  width:0;height:100%;border-radius:inherit;
+  background:linear-gradient(90deg,var(--primary),#55c9ad);
+  box-shadow:0 0 12px rgba(11,144,120,.22);
+  transition:width .45s ease
+}
+@media(max-width:600px){
+  .welcome-user{align-items:stretch;flex-direction:column}
+  .level-box{min-width:0}
+}
+
+.live-list{display:grid;gap:8px}.live-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(100deg,#fff,#fff4ed)}.live-dot{width:9px;height:9px;flex:none;border-radius:50%;background:var(--primary);box-shadow:0 0 0 5px rgba(217,47,47,.10)}.live-main{min-width:0;flex:1}.live-main b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.live-main small{display:block;color:var(--text-faint);font-size:11px;margin-top:3px}.live-price{font-weight:900;color:var(--primary-dark);white-space:nowrap}.live-tag{color:var(--primary)!important}.ad-slot{min-height:155px;display:grid;place-items:center;text-align:center;border:1.5px dashed #e1b6a7;border-radius:17px;background:#fff8f4;color:var(--muted)}.ad-slot strong{display:block;color:var(--text);font-size:17px;margin-bottom:4px}</style>
+<style>body{font-family:"Playpen Sans Arabic",sans-serif} h1,h2,h3,.brand,.nav,.tag,.primary,.task-btn,.login-submit,input,button{font-family:"Vazirmatn",sans-serif}</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
+:root{--bg:#fff8f4;--surface:#fff;--ink:#2a1512;--muted:#806e68;--line:#f0ddd5;--red:#d92f2f;--red2:#ff4f3d;--orange:#ff9b3d;--deep:#7b1717;--shadow:0 18px 55px rgba(125,34,20,.10)}
+*{box-sizing:border-box}body{font-family:'Playpen Sans Arabic',sans-serif!important;background:radial-gradient(800px 420px at 100% -5%,rgba(217,47,47,.16),transparent 68%),radial-gradient(700px 380px at 0 35%,rgba(255,155,61,.15),transparent 70%),var(--bg)!important;color:var(--ink)!important}.top{height:78px!important;background:rgba(255,255,255,.88)!important;border-bottom:1px solid var(--line)!important;box-shadow:0 8px 30px rgba(125,34,20,.06)!important}.brand,.nav,h1,h2,h3,.tag,.primary,.login-submit,.round,.section-head{font-family:'Vazirmatn',sans-serif!important}.brand{color:var(--deep)!important}.brand:before{content:'🦅';background:linear-gradient(145deg,var(--red),var(--orange))!important}.nav{color:#765d55!important;border-radius:14px!important}.nav:hover,.nav.active{background:linear-gradient(135deg,rgba(217,47,47,.11),rgba(255,155,61,.16))!important;color:var(--red)!important}.card{border-color:var(--line)!important;box-shadow:var(--shadow)!important}.hero{min-height:350px!important;padding:48px!important;background:linear-gradient(135deg,#fff 0%,#fff1e7 58%,#ffdcd2 100%)!important}.hero h1{font-size:40px!important;color:var(--deep)}.hero p{max-width:600px}.hero-art{background:linear-gradient(145deg,var(--red),var(--orange))!important;box-shadow:0 28px 70px rgba(217,47,47,.25)!important}.hero-art span{font-family:Vazirmatn;font-size:10px;letter-spacing:3px;color:#fff}.coin{font-size:82px}.primary,.login-submit{background:linear-gradient(135deg,var(--red),var(--orange))!important;box-shadow:0 12px 28px rgba(217,47,47,.22)!important}.welcome-user{margin-top:18px;padding:20px 22px;background:linear-gradient(110deg,#fff,#fff2ea)!important}.stats{gap:18px}.stat{padding:23px!important;position:relative;overflow:hidden}.stat:after{content:'';position:absolute;width:100px;height:100px;border-radius:50%;left:-35px;bottom:-50px;background:rgba(255,155,61,.13)}.stat b{color:var(--deep)!important}.level-fill{background:linear-gradient(90deg,var(--red),var(--orange))!important}.section-head{padding:34px 4px 18px}.section-head h1{font-size:36px;margin:6px 0}.ad-hero{display:flex;align-items:center;gap:22px;padding:30px;background:linear-gradient(120deg,#fff,#fff0e7)}.ad-icon{width:70px;height:70px;border-radius:22px;display:grid;place-items:center;font-size:34px;background:linear-gradient(145deg,var(--red),var(--orange));box-shadow:0 14px 30px rgba(217,47,47,.20)}.ad-slot-big{margin-top:18px;min-height:300px;border:2px dashed #e5b9a9;border-radius:25px;background:rgba(255,255,255,.75);display:grid;place-content:center;text-align:center;color:var(--muted);gap:4px}.ad-slot-big span{font-family:Vazirmatn;font-weight:800;color:var(--deep);font-size:19px}.activity-card{padding:22px}.activity-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--line)}.activity-head h2{margin:0}.activity-head span{color:var(--muted);font-size:12px}.live-pill{font-style:normal;color:var(--red);background:#fff0ed;border-radius:99px;padding:7px 11px;font-size:12px}.live-list{display:grid;gap:10px;padding-top:14px}.live-item{background:linear-gradient(100deg,#fff,#fff3eb)!important;border-color:var(--line)!important;border-radius:17px!important;padding:15px!important}.live-dot{background:var(--red)!important;box-shadow:0 0 0 5px rgba(217,47,47,.10)!important}.live-price{color:var(--deep)!important}.login-screen{background:linear-gradient(145deg,rgba(89,12,12,.92),rgba(255,117,51,.72))!important;backdrop-filter:blur(18px)!important}.login-box{border:1px solid rgba(255,255,255,.6)!important;border-radius:30px!important;box-shadow:0 35px 100px rgba(90,18,10,.35)!important}.login-box input:focus{border-color:var(--red)!important;box-shadow:0 0 0 4px rgba(217,47,47,.08)}
+@media(max-width:720px){.hero{padding:30px!important;min-height:390px!important}.hero h1{font-size:30px!important}.hero-art{width:125px!important;height:125px!important}.top{height:auto!important;min-height:76px!important;flex-wrap:wrap!important}.top nav{width:100%;order:3}.nav{flex:1}.section-head h1{font-size:29px}}
+</style></head>
+<body>
+<div id="loginScreen" class="login-screen">
+ <div class="login-box">
+  <span class="tag">تسجيل الدخول</span>
+  <h1>أهلًا بك 👋</h1>
+  <p class="muted">أدخل <b>أيدي التليكرام</b> و<b>كود تسجيل الموقع</b> الظاهرين في رسالة البداية وقائمة «حسابي» في البوت.</p>
+  <label>أيدي التليكرام</label><input id="telegramId" inputmode="numeric" placeholder="مثال: 123456789">
+  <label>كود تسجيل الموقع</label><input id="registrationCode" maxlength="8" autocomplete="off" placeholder="مثال: AB7K2P9Q">
+  <div id="loginError" class="error"></div>
+  <button id="loginBtn" class="login-submit">تسجيل الدخول</button>
+  <p class="muted" style="font-size:12px">كود التسجيل مرتبط بحسابك. لا تشاركه مع الآخرين.</p>
+ </div>
+</div>
+
+<header class="top">
+ <div class="brand">◆ بوت الربّاحين</div>
+ <nav class="main-nav">
+  <button class="nav active" data-page="home">🏠 الرئيسية</button>
+  <button class="nav" data-page="ads">📢 مزود الإعلانات</button>
+  <button class="nav" data-page="activity">💳 نشاط الدفع</button>
+ </nav>
+ <button class="round" id="theme">☾</button>
+</header>
+
+<main class="wrap">
+<section id="home" class="page active">
+ <div class="hero card">
+  <div class="hero-copy"><span class="tag">بوت الربّاحين</span><h1>مرحبًا بك في منصتك 🎁</h1><p>تابع رصيدك وخبرتك ومستواك في مكان واحد، وشاهد آخر عمليات الشراء مباشرة.</p><button class="primary" data-go="activity">🛍️ مشاهدة نشاط الشراء</button></div>
+  <div class="hero-art"><div class="coin">🪙</div><span>REWARDS</span></div>
+ </div>
+ <div id="welcomeStrip" class="welcome-user card">
+  <div><span class="tag">👋 حسابك</span><div id="welcomeName" class="welcome-user-name">مرحبًا بك 👋</div></div>
+  <div class="level-box"><div class="level-row"><span id="homeLevel">المستوى 1</span><b id="levelXp">0 / 100 XP</b></div><div class="level-track"><div id="levelFill" class="level-fill"></div></div></div>
+ </div>
+ <div class="stats"><div class="stat card"><small>رصيدك</small><b id="balance">0</b><span>نقطة</span></div><div class="stat card"><small>XP</small><b id="xpHome">0</b><span>خبرة</span></div><div class="stat card"><small>المستوى</small><b id="levelHome">1</b><span>مستوى</span></div></div>
+</section>
+
+<section id="ads" class="page">
+ <div class="section-head"><span class="tag">📢 الإعلانات</span><h1>مزود الإعلانات</h1><p class="muted">مساحة مخصصة لعرض إعلانات مزود الخدمة.</p></div>
+ <section class="ad-hero card"><div class="ad-icon">📢</div><div><h2>مساحة مزود الإعلانات</h2><p>يمكنك وضع كود مزود الإعلانات هنا لاحقًا بدون تغيير تصميم الموقع.</p></div></section>
+ <div class="ad-slot-big" id="adProviderSlot"><span>مكان مزود الإعلانات</span><small>Ad Provider Slot</small></div>
+</section>
+
+<section id="activity" class="page">
+ <div class="section-head"><span class="tag">💳 مباشر</span><h1>نشاط الدفع</h1><p class="muted">آخر عمليات شراء العروض من مستخدمي البوت.</p></div>
+ <section class="activity-card card"><div class="activity-head"><div><h2>🛍️ آخر المشتريات</h2><span>تتحدث تلقائيًا</span></div><i class="live-pill">● مباشر</i></div><div id="livePurchases"><div class="loading-row">جاري تحميل النشاط...</div></div></section>
+</section>
+</main>
+<div id="toast" class="toast"></div>
+
+<script>
+/*
+  مهم:
+  API_BASE يجب أن يشير إلى عنوان سيرفر البوت الذي يشغل /api/login.
+  مثال عند الاستضافة الآمنة: https://example.com
+  أو مؤقتًا: http://SERVER-IP:8080
+*/
+const API_BASE = "https://ofz.pythonanywhere.com";
+
+let tasks=[];
+let user=null,current=null,timer=null;
+
+const $=s=>document.querySelector(s);
+function setText(id,v){const e=$("#"+id);if(e)e.textContent=v}
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2200)}
+function showPage(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$("#"+id).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.page===id));scrollTo({top:0,behavior:"smooth"})}
+function setUser(u){
+  user=u||{};
+  const tgName=u.first_name||u.username||"صديقنا";
+  const nameEl=$("#welcomeName"); if(nameEl) nameEl.textContent=tgName+" 👋";
+  const balance=Number(u.balance||0), xp=Number(u.xp||0), level=Number(u.level||1);
+  setText("balance",balance.toLocaleString());
+  setText("xpHome",xp.toLocaleString());
+  setText("levelHome",level);
+  setText("homeLevel","المستوى "+level);
+  setText("levelXp", (xp%100)+" / 100 XP");
+  const fill=$("#levelFill"); if(fill) fill.style.width=((xp%100))+"%";
+}
+async function login(){
+  const id=$("#telegramId").value.trim();
+  const code=$("#registrationCode").value.trim().toUpperCase();
+  const err=$("#loginError");
+  err.style.display="none";
+  if(!id || !code){ err.textContent="أدخل أيدي التليكرام وكود التسجيل."; err.style.display="block"; return; }
+  const btn=$("#loginBtn");
+  btn.disabled=true; btn.textContent="جارٍ تسجيل الدخول...";
+  try{
+    const r=await fetch(API_BASE+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({telegram_id:id,registration_code:code})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok || !d.ok) throw new Error(d.error||"invalid_credentials");
+    setUser(d.user);
+    sessionStorage.setItem("reward_user",JSON.stringify(d.user));
+    $("#loginScreen").style.display="none";
+    showPage("home");
+    await renderLivePurchases();
+    toast("✅ تم تسجيل الدخول بنجاح");
+  }catch(e){
+    console.error("Website login error:",e);
+    err.textContent=e.message==="invalid_credentials"?"❌ أيدي التليكرام أو كود التسجيل غير صحيح.":"❌ تعذر الاتصال بسيرفر البوت. تأكد أن السيرفر يعمل وأن API_BASE صحيح.";
+    err.style.display="block";
+  }finally{
+    btn.disabled=false; btn.textContent="تسجيل الدخول";
+  }
+}
+async function renderLivePurchases(){
+  try{
+    const r=await fetch(API_BASE+"/api/live-purchases?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code)+"&limit=12",{cache:"no-store"});
+    const d=await r.json(); if(!r.ok||!d.ok) throw new Error();
+    const rows=d.purchases||[];
+    $("#livePurchases").innerHTML=rows.length?'<div class="live-list">'+rows.map(x=>`<div class="live-item"><span class="live-dot"></span><div class="live-main"><b>اليوز ${x.user} اشترى ${x.title}</b><small>${x.created_at||""}</small></div><span class="live-price">🛍️ شراء</span></div>`).join("")+'</div>':'<div class="muted">لا توجد عمليات شراء حتى الآن.</div>';
+  }catch{$("#livePurchases").innerHTML='<div class="muted">تعذر تحميل النشاط المباشر حاليًا.</div>'}
+}
+
+async function loadTasks(){
+ try{
+  const r=await fetch(API_BASE+"/api/tasks?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code));
+  const d=await r.json(); if(!r.ok||!d.ok) throw new Error();
+  tasks=d.tasks||[];
+   }catch(e){
+  $("#taskList").innerHTML='<div class="card task"><p class="muted">❌ تعذر تحميل المهام من البوت حاليًا.</p></div>';
+ }
+}
+function renderTasks(){
+ $("#taskList").innerHTML=tasks.length?tasks.map(t=>`<article class="task card"><div class="task-top"><h2>${t.title}</h2><span class="reward">+${t.reward}</span></div><p>${t.description}</p><span class="meta">🏷️ ${t.provider||"مزود"}</span><span class="meta">${t.status==="completed"?"✅ مكتملة":t.status==="started"?"⏳ بدأت":"🆕 متاحة"}</span><button class="task-btn" ${t.status==="completed"?'disabled':''} onclick="startTask(${t.id})">${t.status==="started"?"متابعة المهمة":"ابدأ المهمة"}</button></article>`).join(""):'<div class="card task"><p class="muted">📋 لا توجد مهام متاحة حاليًا.</p></div>';
+}
+
+async function startTask(id){
+ current=tasks.find(t=>t.id===id); if(!current) return;
+ try{
+  const r=await fetch(API_BASE+"/api/tasks/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({telegram_id:user.user_id,registration_code:user.registration_code,task_id:id})});
+  const d=await r.json(); if(!r.ok||!d.ok) throw new Error(d.error||"start_failed");
+  current={...current,...d.task}; showPage("taskView");
+  const open=current.content_kind==="url"&&current.content?`<a class="primary" target="_blank" rel="noopener" href="${current.content}">🌐 فتح رابط المهمة</a>`:`<div class="card" style="padding:15px">${current.content||"نفّذ المطلوب ثم ارجع."}</div>`;
+  $("#taskBody").innerHTML=`<span class="tag">المهمة #${current.id}</span><h1>${current.title}</h1><p class="muted">${current.description||""}</p><p><b>المكافأة:</b> <span class="reward">+${current.reward} نقطة</span></p>${open}<div class="bar"><div id="bar"></div></div><div class="timer" id="timer">${current.duration||0}</div><p id="status" class="muted" style="text-align:center">⏳ المهمة قيد التنفيذ...</p><div class="verify" id="verify"><b>🔐 انتهت مدة الانتظار</b><p class="muted">أكمل التحقق ثم سنفحص حالة المهمة من الخادم.</p><div style="font-size:24px;font-weight:900;margin:15px" id="capq"></div><input id="answer" inputmode="numeric" placeholder="الإجابة"><br><br><button onclick="verify()">تحقق</button></div>`;
+  const duration=current.duration||0; let a=Math.floor(Math.random()*8)+2,b=Math.floor(Math.random()*8)+1; $("#capq").textContent=`${a} + ${b} = ?`; $("#answer").dataset.answer=a+b;
+  let left=duration; clearInterval(timer); if(duration<=0){$("#verify").style.display="block";return;}
+  timer=setInterval(()=>{left--;$("#timer").textContent=left;$("#bar").style.width=((duration-left)/duration*100)+"%";if(left<=0){clearInterval(timer);$("#timer").textContent="✓";$("#status").textContent="أكمل التحقق الآن.";$("#verify").style.display="block"}},1000);
+ }catch(e){toast("❌ تعذر بدء المهمة");}
+}
+async function verify(){
+ if($("#answer").value.trim()!==$("#answer").dataset.answer)return toast("❌ إجابة التحقق غير صحيحة");
+ try{
+  const r=await fetch(API_BASE+"/api/tasks/status?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code)+"&task_id="+current.id);
+  const d=await r.json();
+  if(d.status==="completed"){ toast("🎉 تمت الموافقة على المهمة"); const u=await fetch(API_BASE+"/api/user?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code)); const ud=await u.json(); if(ud.ok){setUser(ud.user);sessionStorage.setItem("reward_user",JSON.stringify(ud.user));} await loadTasks(); showPage("tasks"); }
+  else toast("⏳ لم يصل تأكيد إكمال المهمة بعد. جرّب لاحقًا.");
+ }catch(e){toast("❌ تعذر التحقق من حالة المهمة");}
+}
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>showPage(b.dataset.go));
+$("#back").onclick=()=>{clearInterval(timer);showPage("tasks")};
+async function refreshUserData(){
+  if(!user) return;
+  try{
+    const r=await fetch(API_BASE+"/api/user?telegram_id="+encodeURIComponent(user.user_id)+"&registration_code="+encodeURIComponent(user.registration_code),{cache:"no-store"});
+    const d=await r.json();
+    if(r.ok&&d.ok){setUser(d.user);sessionStorage.setItem("reward_user",JSON.stringify(d.user));}
+    await renderLivePurchases();
+  }catch{}
+}
+$("#loginBtn").onclick=login;
+$("#registrationCode").oninput=e=>e.target.value=e.target.value.toUpperCase();
+$("#theme").onclick=()=>document.body.classList.toggle("dark");
+try{const c=JSON.parse(sessionStorage.getItem("reward_user")||"null");if(c&&c.user_id&&c.registration_code){setUser(c);$("#loginScreen").style.display="none";showPage("home");renderLivePurchases();}}catch{}
+setInterval(refreshUserData,2000);
+</script>
+</body>
+</html>
